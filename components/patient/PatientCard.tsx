@@ -1,9 +1,12 @@
 "use client"
 import React from 'react';
-import { Box, Stack, Typography, Avatar } from '@mui/material';
+import { Box, Stack, Typography, Avatar, useTheme, useMediaQuery } from '@mui/material';
 import { calculateAge } from '@/utils/dateUtils';
 
 export default function PatientCard({ patient }: { patient?: { fname: string; lname: string; pid: string; DOB: string; condition: string } }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  
   const getInitials = (fname: string, lname: string) => {
     return `${fname?.[0] || ''}${lname?.[0] || ''}`.toUpperCase();
   };

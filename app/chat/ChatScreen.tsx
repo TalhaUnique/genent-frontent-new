@@ -157,7 +157,7 @@ const ChatScreen = ({patient}: {patient: Object}) => {
               flex: 1, display: 'flex', 
               flexDirection: 'column',
               padding: 2, overflowY: 'auto',
-              height: '75%'
+              height: '85%'
           }}>
               
               <List sx={{ flexGrow: 1, overflowY: 'auto' }}>

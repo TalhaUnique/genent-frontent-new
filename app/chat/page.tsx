@@ -3,9 +3,9 @@ import { Container } from '@mui/material';
 import ChatScreen from './ChatScreen';
 
 const ChatPage = () => (
-  <Container maxWidth="lg" sx={{ py: 4 }}>
+  // <Container maxWidth="lg" sx={{ py: 4 }}>
     <ChatScreen />
-  </Container>
+  // </Container>
 );
 
 export default ChatPage;

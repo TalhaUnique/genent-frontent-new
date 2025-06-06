@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { Button, Grid, Paper, Typography, IconButton, Box } from '@mui/material';
+import { Button, Grid, useTheme, useMediaQuery, Typography } from '@mui/material';
 import ChatScreen from '@/app/chat/ChatScreen';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import CloseIcon from '@mui/icons-material/Close';
@@ -10,10 +10,13 @@ import APIRepository from '@/utils/APIRepository';
 
 export default function PatientDetailPage({ params }: { params: { patient_uuid: string } }) {
   const { patient_uuid } = React.use(params);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
   const [patientDetails, setPatientDetails] = useState(null);
   // State to control the visibility of the patient info section
-  const [showPatientInfo, setShowPatientInfo] = useState(true);
-
+  const [showPatientInfo, setShowPatientInfo] = useState(!isMobile);
+  
   useEffect(() => {
     const fetchPatientDetails = async () => {
       try {
@@ -40,10 +43,10 @@ export default function PatientDetailPage({ params }: { params: { patient_uuid: 
     <Grid container spacing={0}>
       <Grid
         item
-        size={6}
+        size={isMobile ? 12 : 6}
         sx={{
           transition: 'all 0.3s ease',
-          width: showPatientInfo ? '50%' : '0%',
+          width: showPatientInfo ? isMobile ? '100%' : '50%' : '0%',
           overflow: 'auto',
         }}
       >
@@ -54,29 +57,28 @@ export default function PatientDetailPage({ params }: { params: { patient_uuid: 
         size={showPatientInfo ? 6 : 12}
         sx={{
           transition: 'all 0.3s ease',
-          width: showPatientInfo ? '50%' : '100%',
+          width: showPatientInfo ? isMobile ? '0%' : '50%' : '100%',
           overflow: 'auto',
         }}
       >
-        {/* <Paper
-          elevation={0}
-          sx={{
-            p: 2,
-            height: '85vh',
-          }}
-        > */}
+        
           {!showPatientInfo && patientDetails && (
             <Button
               variant="text"
               color="primary"
               startIcon={<PersonOutlineOutlinedIcon />}
               onClick={handleViewPatientClick}
+              sx={{ml: 2}}
             >
-              View Patient
-            </Button>
+            {patientDetails['fname']} {patientDetails['lname']}              
+          </Button>
           )}
-          {patientDetails && <ChatScreen patient={patientDetails} />}
-        {/* </Paper> */}
+          { !(isMobile && showPatientInfo) &&
+            <>
+            {patientDetails && <ChatScreen patient={patientDetails} />}
+            </>
+          }
+          
       </Grid>
     </Grid>
   );

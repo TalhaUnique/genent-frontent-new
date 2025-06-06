@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Paper, InputBase, IconButton, Stack } from '@mui/material';
+import { Box, Paper, InputBase, IconButton, useTheme, useMediaQuery } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import MicIcon from '@mui/icons-material/Mic';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
@@ -21,7 +21,9 @@ const ChatInput = ({ onSend }) => {
         stopListening,
         resetTranscript
       } = useSpeechToText();
-
+      
+      const theme = useTheme()
+      const isMobile = useMediaQuery(theme.breakpoints.down('md'))
     const handleSend = () => {
         if (message.trim()) {
             onSend(message);
@@ -61,18 +63,20 @@ const ChatInput = ({ onSend }) => {
     }, [transcript]);
 // ${t.palette.divider}
     return (
-        <Box mt={2} sx={{flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'sticky', bottom: 20, left: 0}}>
+        <Box mt={2} sx={{flex: 1, display: 'flex', justifyContent: 'center', 
+        alignItems: 'center', position: 'sticky', bottom: isMobile ? 40 : 5, left: 0}}>
             <Paper
                 elevation={3}
-                sx={{   
-                    p: 2,
+                sx={(theme) => ({   
+                    p: 1,
                     borderRadius: 6,
                     display: 'flex',
                     flexDirection: 'column',
                     gap: 1,
                     border: t => `0.5px solid `,
                     width: '100%',
-                }}
+                    background: theme.palette.background.default
+                })}
             >
                 <InputBase
                     multiline
@@ -89,8 +93,20 @@ const ChatInput = ({ onSend }) => {
                         fontSize: 16,
                         bgcolor: 'background.paper',
                     }}
+                    startAdornment = {<IconButton sx={{ border: t => `0.5px solid `, borderRadius: 4, mr: 1 }} onClick={listening ? stopListening : startRecording} >
+                            {listening ? <StopCircleIcon sx={{color: 'red'}} /> : <MicIcon />}
+                        </IconButton>}
+                    endAdornment = {
+                        <IconButton
+                            color="primary"
+                            onClick={handleSend}
+                            sx={{ border: t => `0.5px solid `, borderRadius: 4 }}
+                        >
+                            <SendIcon />
+                        </IconButton>
+                    }
                 />
-                <Stack direction="row" spacing={1} justifyContent="space-between">
+                {/* Commented for later use <Stack direction="row" spacing={1} justifyContent="space-between">
                     <Stack direction="row" spacing={1}>
                         <IconButton sx={{ border: t => `0.5px solid `, borderRadius: 4 }}>
                             <InsertPhotoIcon />
@@ -114,7 +130,7 @@ const ChatInput = ({ onSend }) => {
                             <SendIcon />
                         </IconButton>
                     </Stack>
-                </Stack>
+                </Stack> */}
             </Paper>
         </Box>
     );

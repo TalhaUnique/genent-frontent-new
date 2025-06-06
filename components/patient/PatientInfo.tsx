@@ -28,6 +28,7 @@ const PatientInfoAccordion = ({ title, icon, children }: { title: string; icon?:
         '&::before': {
           display: 'none',
         },
+        borderRadius: '20px',
       }}
     >
       <AccordionSummary

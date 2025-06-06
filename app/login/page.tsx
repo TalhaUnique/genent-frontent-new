@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { Box, TextField, Button, Typography, Paper, Stack } from '@mui/material';
+import { Box, TextField, Button, Typography, Paper, Stack, useTheme, useMediaQuery } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import APIRepository from '@/utils/APIRepository';
 
@@ -10,7 +10,8 @@ export default function LoginPage() {
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const router = useRouter();
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const handleLogin = async () => {
     try {
       const formData = new FormData();
@@ -52,7 +53,7 @@ export default function LoginPage() {
         elevation={2}
         variant="outlined"
         sx={{
-          width: '40%',
+          width: isMobile ? '95%' : "50%",
           p: 4,
           borderRadius: 10,
         }}
@@ -68,7 +69,7 @@ export default function LoginPage() {
             <img
               src="/gennet.avif"
               alt="Logo"
-              style={{ width: 125, marginLeft: 8 }}
+              style={{ width: 125, marginLeft: -35 }}
             />
             <Typography variant="h5" sx={{ mb: 2 }}>
               Signin

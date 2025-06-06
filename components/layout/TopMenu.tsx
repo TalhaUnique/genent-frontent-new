@@ -10,6 +10,8 @@ import {
   Typography,
   ListItemIcon,
   Box,
+  useTheme,
+  useMediaQuery
 } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -19,14 +21,16 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useRouter } from 'next/navigation';
 
-const TopMenu: React.FC<{ onMenuClick?: () => void; sideMenuOpen?: boolean }> = ({
+const TopMenu: React.FC<{ onMenuClick?: () => void; sideMenuOpen?: boolean, toggleThemeMode: any }> = ({
   onMenuClick,
   sideMenuOpen,
+  toggleThemeMode
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [darkMode, setDarkMode] = useState(false);
   const open = Boolean(anchorEl);
   const router = useRouter();
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleAvatarClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -40,15 +44,20 @@ const TopMenu: React.FC<{ onMenuClick?: () => void; sideMenuOpen?: boolean }> = 
   };
 
   const handleThemeToggle = () => {
-    setDarkMode((prev) => !prev);
-  };
-
+    if(theme.palette.mode == "dark"){
+      toggleThemeMode("light")
+    } 
+    else{
+      toggleThemeMode("dark")
+    }
+  }
+ 
   return (
     <AppBar
       position="fixed"
       elevation={0}
       sx={{
-        backgroundColor: 'white',
+        // backgroundColor: 'white',
         borderBottom: 1,
         borderColor: 'divider',
         boxShadow: 'none',
@@ -57,7 +66,7 @@ const TopMenu: React.FC<{ onMenuClick?: () => void; sideMenuOpen?: boolean }> = 
     >
       <Toolbar sx={{ justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          {onMenuClick && (
+          {onMenuClick && !isMobile && (
             <IconButton
               edge="start"
               // color="inherit"
@@ -76,7 +85,9 @@ const TopMenu: React.FC<{ onMenuClick?: () => void; sideMenuOpen?: boolean }> = 
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <IconButton onClick={handleThemeToggle} size="small" sx={{ ml: 1 }}>
-            {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+            {theme.palette.mode == "dark" ? 
+              <Brightness7Icon /> : 
+              <Brightness4Icon />}
           </IconButton>
           <IconButton onClick={handleAvatarClick} size="small" sx={{ ml: 2 }}>
             <Avatar alt="Profile" src="/avatar.png" />
