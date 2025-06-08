@@ -21,7 +21,6 @@ export default function PatientDetailPage({ params }: { params: { patient_uuid: 
     const fetchPatientDetails = async () => {
       try {
         const response = await APIRepository.get(`/emr/patient?patientId=${patient_uuid}`);
-        console.log('Patient details response:', response.data.data);
         setPatientDetails(response.data.data);
       } catch (error) {
         console.error('Failed to fetch patient details:', error);

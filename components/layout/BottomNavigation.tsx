@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import ChatIcon from "@mui/icons-material/Chat";
+import HistoryIcon from '@mui/icons-material/History';
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useRouter } from "next/navigation";
 import PeopleIcon from '@mui/icons-material/People';
@@ -28,7 +29,7 @@ const BottomNav: React.FC = () => {
         router.push(`/patient-detail/${patientId}`);
         break;
       case 2:
-        router.push("/settings");
+        router.push("/history");
         break;
     }
   };
@@ -48,7 +49,7 @@ const BottomNav: React.FC = () => {
       <BottomNavigation value={value} onChange={handleChange} showLabels>
         <BottomNavigationAction label="Patients" icon={<PeopleIcon />} />
         <BottomNavigationAction label="Chat" icon={<ChatIcon />} />
-        <BottomNavigationAction label="Settings" icon={<SettingsIcon />} />
+        <BottomNavigationAction label="Recent" icon={<HistoryIcon />} />
       </BottomNavigation>
     </Paper>
   );

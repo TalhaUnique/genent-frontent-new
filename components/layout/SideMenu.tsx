@@ -19,6 +19,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import PeopleIcon from '@mui/icons-material/People';
 import ChatIcon from '@mui/icons-material/Chat';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import RecentChatsList from '@/components/chat/RecentChatsList';
 
 const recentChats = [
   { id: 1, name: 'John Doe', avatar: '', lastMessage: 'See you at 2pm' },
@@ -80,25 +81,8 @@ const SideMenu: React.FC<{ open?: boolean; setOpen?: (open: boolean) => void }> 
       </List>
       <Divider sx={{ my: 1 }} />
       <Collapse in={open}>
-        <Box sx={{ px: 2, pb: 1, flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
-          <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-            Recent Chats
-          </Typography>
-          <Box sx={{ flex: 1, overflowY: 'auto' }}>
-            <Stack spacing={1}>
-              {recentChats.map((chat) => (
-                <Box key={chat.id} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Avatar sx={{ width: 28, height: 28 }}>{chat.name[0]}</Avatar>
-                  <Box>
-                    <Typography variant="body2" noWrap>{chat.name}</Typography>
-                    <Typography variant="caption" color="text.secondary" noWrap>
-                      {chat.lastMessage}
-                    </Typography>
-                  </Box>
-                </Box>
-              ))}
-            </Stack>
-          </Box>
+        <Box sx={{px:1,flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+          <RecentChatsList/>
         </Box>
       </Collapse>
     </Drawer>

@@ -16,6 +16,14 @@ const ChatScreen = ({patient}: {patient: Object}) => {
   const messagesEndRef = useRef(null);
 
   const [speaking, setSpeaking] = useState(false)
+
+  useEffect(() => {
+    APIRepository.get(`chat/${patient.latest_chat_id}`).then((res) => {
+      var convertedMessages = convertToChatMessages(res.data.chat_history)
+      setMessages(convertedMessages)
+      setchatId(res.data.metadata.chatId)
+    })
+  }, [])
   
   const {
         speak,
@@ -159,24 +167,28 @@ const ChatScreen = ({patient}: {patient: Object}) => {
               padding: 2, overflowY: 'auto',
               height: '85%'
           }}>
-              
-              <List sx={{ flexGrow: 1, overflowY: 'auto' }}>
-                  {messages.map((message, index) => (
-                      <ChatMessage
-                          key={index}
-                          msgIndex={index}
-                          message={message.text}
-                          sender={message.sender}
-                          msgType = {message.type}
-                          speakingMsgIndex={speakingMsgIndex}
-                          startSpeaking={startSpeaking}
-                          stopSpeaking={stopTextSpeaking}
-                      />
-                  ))}
-              <div ref={messagesEndRef} />
+              {messages.length ?
+                <List sx={{ flexGrow: 1, overflowY: 'auto' }}>
+                    {messages.map((message, index) => (
+                        <ChatMessage
+                            key={index}
+                            msgIndex={index}
+                            message={message.text}
+                            sender={message.sender}
+                            msgType = {message.type}
+                            speakingMsgIndex={speakingMsgIndex}
+                            startSpeaking={startSpeaking}
+                            stopSpeaking={stopTextSpeaking}
+                        />
+                    ))}
+                <div ref={messagesEndRef} />
 
-              </List>
-              
+                </List>:
+                <Box sx={{display: "flex", flexDirection:"column", alignItems:"center", justifyContent:"center", height: "100%"}} >
+                  <Typography variant="body1" color="text.secondary">No conversation found for the patient.</Typography>
+                  <Typography variant="body2" color="text.secondary">Send a new message to start the conversation.</Typography>
+                </Box>
+              }
           </Box>
           <ChatInput onSend={startStream} />
       

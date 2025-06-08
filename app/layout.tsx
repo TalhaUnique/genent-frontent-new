@@ -6,6 +6,7 @@ import getMuiTheme from "../theme/muiTheme";
 import TopMenu from "@/components/layout/TopMenu";
 import SideMenu from "@/components/layout/SideMenu";
 import BottomNav from "@/components/layout/BottomNavigation";
+import APIRepository from "@/utils/APIRepository";
 
 export default function Layout({ children }: { children: ReactNode }) {
 
