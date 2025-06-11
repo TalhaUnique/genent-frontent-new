@@ -1,0 +1,63 @@
+name: Build and Deploy to AWS ECR
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: gennet-ai-frontend-prod
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js app
+        run: npm run build
+
+      - name: Install only production deps
+        run: npm ci --omit=dev
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Get ECR repository URI
+        id: ecr-uri
+        run: |
+          echo "REPO_URI=$(aws ecr describe-repositories --repository-names $ECR_REPOSITORY --query 'repositories[0].repositoryUri' --output text)" >> $GITHUB_ENV
+
+      - name: Set image tags
+        id: tag
+        run: |
+          TIMESTAMP=$(date +'%Y-%m-%d-%H-%M-%S')
+          echo "IMAGE_TAG_TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
+
+      - name: Build Docker image (runtime only)
+        run: |
+          docker build -t $REPO_URI:latest -t $REPO_URI:$IMAGE_TAG_TIMESTAMP .
+
+      - name: Push Docker image to ECR
+        run: |
+          docker push $REPO_URI:latest
+          docker push $REPO_URI:$IMAGE_TAG_TIMESTAMP
