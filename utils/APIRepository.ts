@@ -183,7 +183,7 @@ const handleError = (error: any, originalConfig: AxiosRequestConfig) => {
   if (
     error.response?.status === 503 &&
     typeof detail === "string" &&
-    detail.toLowerCase().includes("starting")
+    (detail == "instance_starting" || detail == "failed" || detail == "instance_unavailable")
   ) {
     startPollingOriginalRequest(originalConfig);
   }
