@@ -146,12 +146,16 @@ const startPollingOriginalRequest = (originalConfig: AxiosRequestConfig) => {
 
   apiEvents.emit("serverStarting");
 
+
   const poll = async () => {
     try {
+      console.log("STARTED POLLING", originalConfig)
       const res = await axiosInstance.request(originalConfig);
       if (res.status === 200) {
+        console.log('GOT RESPONSE 200')
         apiEvents.emit("serverReady");
         isPolling = false;
+        window.location.reload()
         return;
       }
     } catch (err: any) {
@@ -160,18 +164,17 @@ const startPollingOriginalRequest = (originalConfig: AxiosRequestConfig) => {
 
       // If it's not the "server is starting" error, throw it
       if (
-        status !== 503 ||
-        typeof detail !== 'string' ||
-        !detail.toLowerCase().includes("starting")
+        status !== 503 &&
+        typeof detail !== 'string' &&
+        !(detail == "instance_starting" || detail == "failed" || detail == "instance_unavailable")
       ) {
-        console.log("HEREEERERERERERERERERERER")
         isPolling = false;
         throw err;
       }
-
+      console.log("HERE AFTER CAUGHT 503")
       // Otherwise, keep polling
     }
-
+    console.log("keep polling")
     setTimeout(poll, 5000);
   };
 
@@ -180,11 +183,13 @@ const startPollingOriginalRequest = (originalConfig: AxiosRequestConfig) => {
 
 const handleError = (error: any, originalConfig: AxiosRequestConfig) => {
   const detail = error.response?.data?.detail;
+  console.log("HANDLE ERROR: ", detail)
   if (
     error.response?.status === 503 &&
     typeof detail === "string" &&
     (detail == "instance_starting" || detail == "failed" || detail == "instance_unavailable")
   ) {
+    console.log("START POLLING IN HANDLE ERROR")
     startPollingOriginalRequest(originalConfig);
   }
   throw error;
