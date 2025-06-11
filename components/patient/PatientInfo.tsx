@@ -66,7 +66,7 @@ const PatientInfoAccordion = ({ title, icon, children }: { title: string; icon?:
 
 interface PatientInfoProps {
   onClose: () => void;
-  patient: Object
+  patient: any
 }
 
 export default function PatientInfo({ onClose, patient }: PatientInfoProps) {

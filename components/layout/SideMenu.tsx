@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import {
   Drawer,
@@ -5,27 +6,16 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  IconButton,
   Divider,
   Box,
   Typography,
   Collapse,
-  Avatar,
-  Stack,
   useMediaQuery,
-  useTheme
+  useTheme,
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
 import PeopleIcon from '@mui/icons-material/People';
 import ChatIcon from '@mui/icons-material/Chat';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import RecentChatsList from '@/components/chat/RecentChatsList';
-
-const recentChats = [
-  { id: 1, name: 'John Doe', avatar: '', lastMessage: 'See you at 2pm' },
-  { id: 2, name: 'Jane Smith', avatar: '', lastMessage: 'Vitals updated' },
-  { id: 3, name: 'Alice Johnson', avatar: '', lastMessage: 'Sent X-ray' },
-];
 
 const SideMenu: React.FC<{ open?: boolean; setOpen?: (open: boolean) => void }> = ({
   open = true,
@@ -53,29 +43,30 @@ const SideMenu: React.FC<{ open?: boolean; setOpen?: (open: boolean) => void }> 
         },
       }}}
     >
-      {/* <Box sx={{ display: 'flex', alignItems: 'center', p: 1, justifyContent: open ? 'flex-end' : 'center' }}>
-        {setOpen && (
-          <IconButton onClick={() => setOpen(!open)} size="small">
-            {open ? <ChevronLeftIcon /> : <MenuIcon />}
-          </IconButton>
-        )}
-      </Box>
-      <Divider /> */}
       <List>
         <ListItem  component="a" href="/patients">
           <ListItemIcon sx={{ minWidth: 0, mr: open ? 2 : 'auto', justifyContent: 'center' }}>
             <PeopleIcon />
           </ListItemIcon>
           <Collapse in={open} orientation="horizontal">
-            <ListItemText primary="Patients" />
+            <ListItemText primary={<Typography 
+              sx = {(theme) => ({
+                color: theme.palette.text.primary
+              })}
+              >Patients</Typography>} 
+            />
           </Collapse>
         </ListItem>
-        <ListItem  component="a" href="/chat">
+        <ListItem  component="a" href={`/patients`}>
           <ListItemIcon sx={{ minWidth: 0, mr: open ? 2 : 'auto', justifyContent: 'center' }}>
             <ChatIcon />
           </ListItemIcon>
           <Collapse in={open} orientation="horizontal">
-            <ListItemText primary="Chat" />
+            <ListItemText primary={<Typography 
+              sx = {(theme) => ({
+                color: theme.palette.text.primary
+              })}
+            >Chat</Typography>} />
           </Collapse>
         </ListItem>
       </List>

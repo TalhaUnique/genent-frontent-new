@@ -1,24 +1,51 @@
 "use client";
+
 import React, { ReactNode, useEffect, useState } from "react";
 import { Box, ThemeProvider, Stack, useMediaQuery, CssBaseline } from "@mui/material";
 import { useRouter, usePathname } from "next/navigation";
-import getMuiTheme from "../theme/muiTheme";
+import getMuiTheme from "@/theme/muiTheme";
 import TopMenu from "@/components/layout/TopMenu";
 import SideMenu from "@/components/layout/SideMenu";
 import BottomNav from "@/components/layout/BottomNavigation";
-import APIRepository from "@/utils/APIRepository";
+
+type themeMode="dark" | "light" | null
 
 export default function Layout({ children }: { children: ReactNode }) {
 
-  const [themeMode, setThemeMode] = useState<"dark" | "light">("light")
+  const [themeMode, setThemeMode] = useState<themeMode>(null);
+  const [theme, setTheme] = useState({})
   const [sideMenuOpen, setSideMenuOpen] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
-  const theme = getMuiTheme(themeMode)
-  // Move these inside ThemeProvider
-  // We'll create a custom component to use hooks after ThemeProvider mounts
+  
+
+  useEffect(() => {
+    const storedTheme = localStorage.getItem('theme_mode') as themeMode | null;
+    if (storedTheme === 'dark' || storedTheme === 'light') {
+      setThemeMode(storedTheme);
+      setTheme(getMuiTheme(storedTheme))
+    }
+    else{
+      setThemeMode("light");
+      setTheme(getMuiTheme("light"))
+    }
+  }, []);
+
+  useEffect(() => {
+    if(themeMode != null){
+      localStorage.setItem('theme_mode', themeMode as "dark" | "light");
+      setTheme(getMuiTheme(themeMode as "dark" | "light"))
+    }
+    
+  }, [themeMode]);
+
+
+  if (themeMode == null){
+    return <html><body></body></html>
+  }
   return (
     <html><body>
+        
         <ThemeProvider theme={theme}>
         <CssBaseline />
         <LayoutContent
@@ -26,7 +53,13 @@ export default function Layout({ children }: { children: ReactNode }) {
             sideMenuOpen={sideMenuOpen}
             setSideMenuOpen={setSideMenuOpen}
             theme={theme}
-            toggleThemeMode={setThemeMode}
+            toggleThemeMode={(mode: themeMode) => {
+              setThemeMode(mode)
+              if (typeof window !== "undefined"){
+                localStorage.setItem("theme_mode", mode as string)
+
+              }
+            }}
         >
             {children}
         </LayoutContent>
@@ -46,7 +79,7 @@ function LayoutContent({
   toggleThemeMode
 }: {
   children: ReactNode;
-  pathname: string;
+  pathname: string | null;
   sideMenuOpen: boolean;
   setSideMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   theme: any;

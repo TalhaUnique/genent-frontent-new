@@ -26,7 +26,7 @@ export default function PatientDetails({ patient }: { patient: { [key: string]: 
       </Typography>
       <Grid container spacing={2}>
         {relevantFields.map((field, index) => (
-          <Grid item size={{xs: 12, md:6}} key={index}>
+          <Grid size={{xs: 12, md:6}} key={index}>
             <Typography variant="body2" color="text.secondary">
               {field.label}:
             </Typography>

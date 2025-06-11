@@ -1,3 +1,4 @@
+"use client";
 import { Box, Typography, IconButton, Stack, Tooltip, Divider } from '@mui/material';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 // import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
@@ -21,15 +22,15 @@ interface ChatMessageProps {
 }
 
 interface HtmlRendererProps {
-  escapedHtml: string;
+  escapedHtml: string | undefined | null;
 }
 
 const HtmlRenderer: React.FC<HtmlRendererProps> = ({ escapedHtml }) => {
   const [unescapedHtml, setUnescapedHtml] = useState<string>('');
 
   useEffect(() => {
-    const txt = document.createElement('textarea');
-    txt.innerHTML = escapedHtml;
+    const txt: HTMLTextAreaElement = document.createElement('textarea');
+    txt.innerHTML = escapedHtml as string;
     setUnescapedHtml(txt.value);
   }, [escapedHtml]);
 

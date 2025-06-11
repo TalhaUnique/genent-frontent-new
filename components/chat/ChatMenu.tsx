@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { Card, Box, Typography, IconButton, Stack } from '@mui/material';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';

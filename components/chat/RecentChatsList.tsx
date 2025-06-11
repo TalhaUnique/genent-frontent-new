@@ -45,8 +45,8 @@ const RecentChatsList: React.FC = () => {
         Recent Chats
       </Typography>
       <List sx={{ width: '100%' }}>
-        {chats.map((chat) => (
-          <React.Fragment key={chat.chatId}>
+        {chats.map((chat: any, index: number) => (
+          <React.Fragment key={index}>
             <ListItem disablePadding>
               <ListItemButton onClick={() => navigateToChat(chat.metadata.patientId)}>
                 <ListItemAvatar>
@@ -56,7 +56,9 @@ const RecentChatsList: React.FC = () => {
                   primary={
                     <Typography
                         variant="body2"
-                        color="text.primary"
+                        sx = {(theme) => ({
+                          color: theme.palette.text.primary
+                        })}
                       >
                       {chat.metadata['patient_name']}
                       </Typography>

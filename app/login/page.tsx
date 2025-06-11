@@ -1,4 +1,8 @@
 "use client";
+
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Paper, Stack, useTheme, useMediaQuery } from '@mui/material';
 import { useRouter } from 'next/navigation';
@@ -20,15 +24,18 @@ export default function LoginPage() {
       formData.append('grant_type', 'password');
       formData.append('scope', '');
 
-      const response = await APIRepository.post('/auth/access-token', formData, {
+      const response: any = await APIRepository.post('/auth/access-token', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
       const { access_token } = response.data;
-      localStorage.setItem('authToken', access_token);
-      localStorage.setItem('isLoggedIn', 'true');
+      if (typeof window !== undefined){
+        localStorage.setItem('authToken', access_token);
+        localStorage.setItem('isLoggedIn', 'true');
+      }
+      
       router.push('/patients');
     } catch (error: any) {
       console.error('Login failed:', error);

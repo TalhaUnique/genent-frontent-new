@@ -8,18 +8,18 @@ import APIRepository from '@/utils/APIRepository';
 import { useTextToSpeech } from '@/hooks/useTextToSpeech';
 
 interface iMessgeList {type: string; text: string; sender: "user" | "bot"; status: "streaming" | "final"}
-
-const ChatScreen = ({patient}: {patient: Object}) => {
+interface APIMessage {instruction: string; response: string;}
+const ChatScreen = ({patient}: {patient: any}) => {
   const [messages, setMessages] = useState<iMessgeList[]>([]);
   const [chatId, setchatId] = useState<string | null>(null);
   const [speakingMsgIndex, setSpeakingMsgIndex] = useState<number | null>(null)
-  const messagesEndRef = useRef(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const [speaking, setSpeaking] = useState(false)
 
   useEffect(() => {
-    APIRepository.get(`chat/${patient.latest_chat_id}`).then((res) => {
-      var convertedMessages = convertToChatMessages(res.data.chat_history)
+    APIRepository.get(`chat/${patient.latest_chat_id}`).then((res : any) => {
+      var convertedMessages = convertToChatMessages(res.data.chat_history as APIMessage[])
       setMessages(convertedMessages)
       setchatId(res.data.metadata.chatId)
     })
@@ -41,8 +41,8 @@ const ChatScreen = ({patient}: {patient: Object}) => {
     stopSpeaking()
   }
 
-  const convertToChatMessages = (apiMessages: {instruction: string, response: string}[]  ) => {
-    const msgs = [];
+  const convertToChatMessages = (apiMessages: APIMessage[] ): iMessgeList[]  => {
+    const msgs:iMessgeList[] = [];
 
     for (const item of apiMessages) {
       // User message
@@ -50,6 +50,7 @@ const ChatScreen = ({patient}: {patient: Object}) => {
         type: "text",
         text: item.instruction,
         sender: "user",
+        status: "final"
       });
 
       // Bot message
@@ -57,6 +58,7 @@ const ChatScreen = ({patient}: {patient: Object}) => {
         type: "text",
         text: item.response,
         sender: "bot",
+        status: "final"
       });
     }
 
@@ -150,9 +152,8 @@ const ChatScreen = ({patient}: {patient: Object}) => {
 
   useEffect(() => {
     // Scroll to the bottom whenever messages change
-    if (messagesEndRef.current) {
+    if (messagesEndRef && messagesEndRef.current ) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-      
     }
   }, [messages]);
 
@@ -185,8 +186,12 @@ const ChatScreen = ({patient}: {patient: Object}) => {
 
                 </List>:
                 <Box sx={{display: "flex", flexDirection:"column", alignItems:"center", justifyContent:"center", height: "100%"}} >
-                  <Typography variant="body1" color="text.secondary">No conversation found for the patient.</Typography>
-                  <Typography variant="body2" color="text.secondary">Send a new message to start the conversation.</Typography>
+                  <Typography variant="body1" sx={(theme) => ({
+                    color: theme.palette.text.secondary
+                  })}>No conversation found for the patient.</Typography>
+                  <Typography variant="body2" sx={(theme) => ({
+                    color: theme.palette.text.secondary
+                  })}>Send a new message to start the conversation.</Typography>
                 </Box>
               }
           </Box>

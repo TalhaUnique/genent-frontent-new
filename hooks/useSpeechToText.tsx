@@ -4,7 +4,7 @@ export const useSpeechToText = () => {
   const [transcript, setTranscript] = useState('');
   const [listening, setListening] = useState(false);
   const [browserSupportsSpeechRecognition, setBrowserSupport] = useState(false);
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const recognitionRef = useRef<any | null>(null);
   const finalTranscriptRef = useRef('');
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export const useSpeechToText = () => {
     recognition.interimResults = true;
     recognition.lang = 'en-US';
 
-    recognition.onresult = (event: SpeechRecognitionEvent) => {
+    recognition.onresult = (event: any) => {
       let interim = '';
       for (let i = event.resultIndex; i < event.results.length; ++i) {
         const result = event.results[i];

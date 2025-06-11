@@ -1,4 +1,7 @@
 "use client";
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+
 import React, { useState, useEffect } from 'react';
 import {
   Typography,
@@ -11,7 +14,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemSecondaryAction,
   Divider,
   useMediaQuery,
   useTheme,
@@ -44,7 +46,7 @@ const PatientsPage = () => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const response = await APIRepository.get('/emr/patients');
+        const response : any = await APIRepository.get('/emr/patients');
         setPatients(response.data.data);
       } catch (error) {
         console.error('Failed to fetch patients:', error);
@@ -57,13 +59,20 @@ const PatientsPage = () => {
   const paginatedRows = patients.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const handleActionClick = (patientId: string) => {
-    localStorage.setItem("active_chat_patient", patientId)
+    if (typeof window !== "undefined"){
+      localStorage.setItem("active_chat_patient", patientId)
+
+    }
     router.push(`/patient-detail/${patientId}`);
   };
 
   return (
     <Container maxWidth="lg" sx={{ mt: 2 }}>
-      <Typography variant="h4" gutterBottom color='text.primary'>
+      <Typography variant="h4" gutterBottom  
+        sx = {(theme) => ({
+          color: theme.palette.text.primary
+        })}
+      >
         Patients
       </Typography>
 
@@ -95,7 +104,7 @@ const PatientsPage = () => {
       {isMobile ? (
         <Paper variant="outlined">
           <List disablePadding>
-            {patients.map((row, index) => (
+            {patients.map((row: any, index) => (
               <React.Fragment key={index}>
                 <ListItem
                   alignItems="flex-start"
@@ -131,7 +140,7 @@ const PatientsPage = () => {
             headers={headCells}
             rows={paginatedRows}
             showActions
-            actionItems={(row) => (
+            actionItems={(row: any) => (
               <ChatIcon
                 color="primary"
                 onClick={() => handleActionClick(row.uuid)}

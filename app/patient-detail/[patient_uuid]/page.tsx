@@ -1,4 +1,7 @@
 "use client"
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+
 import React, { useState, useEffect } from 'react';
 import { Button, Grid, useTheme, useMediaQuery, Typography } from '@mui/material';
 import ChatScreen from '@/app/chat/ChatScreen';
@@ -8,8 +11,8 @@ import { Stack } from '@mui/system';
 import PatientInfo from '@/components/patient/PatientInfo';
 import APIRepository from '@/utils/APIRepository';
 
-export default function PatientDetailPage({ params }: { params: { patient_uuid: string } }) {
-  const { patient_uuid } = React.use(params);
+export default function PatientDetailPage({ params }: any) {
+  const { patient_uuid } = React.use(params) as any;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -20,7 +23,7 @@ export default function PatientDetailPage({ params }: { params: { patient_uuid: 
   useEffect(() => {
     const fetchPatientDetails = async () => {
       try {
-        const response = await APIRepository.get(`/emr/patient?patientId=${patient_uuid}`);
+        const response: any = await APIRepository.get(`/emr/patient?patientId=${patient_uuid}`);
         setPatientDetails(response.data.data);
       } catch (error) {
         console.error('Failed to fetch patient details:', error);
@@ -41,7 +44,6 @@ export default function PatientDetailPage({ params }: { params: { patient_uuid: 
   return (
     <Grid container spacing={0}>
       <Grid
-        item
         size={isMobile ? 12 : 6}
         sx={{
           transition: 'all 0.3s ease',
@@ -52,7 +54,6 @@ export default function PatientDetailPage({ params }: { params: { patient_uuid: 
         {showPatientInfo && patientDetails && <PatientInfo patient={patientDetails} onClose={handleClosePatientInfo} />}
       </Grid>
       <Grid
-        item
         size={showPatientInfo ? 6 : 12}
         sx={{
           transition: 'all 0.3s ease',

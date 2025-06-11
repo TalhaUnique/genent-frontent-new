@@ -1,3 +1,4 @@
+"use client"
 import { createTheme } from '@mui/material/styles';
 
 const getMuiTheme = (mode: "light" | "dark" = "light") => {

@@ -1,10 +1,15 @@
-import RecentChatsList from "@/components/chat/RecentChatsList";
+"use client";
+import dynamic from 'next/dynamic'
 
+const RecentChatsList = dynamic(
+  () => import("@/components/chat/RecentChatsList"),
+  { ssr: false }
+)
 const RecentChatsPage: React.FC = () => {
   return (
-    <main style={{ padding: "1rem" }}>
+    <div style={{ padding: "1rem" }}>
       <RecentChatsList/>
-    </main>
+    </div>
   );
 };
 

@@ -3,15 +3,12 @@
 import { Box, Paper, InputBase, IconButton, useTheme, useMediaQuery } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import MicIcon from '@mui/icons-material/Mic';
-import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import { useState, useEffect } from 'react';
 import { useSpeechToText } from '@/hooks/useSpeechToText';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 
 
-const ChatInput = ({ onSend }) => {
+const ChatInput = ({ onSend }: {onSend: (msg: string) => void}) => {
     const [message, setMessage] = useState('');
     const [transcriptCursor, setTranscriptCursor] = useState(0);
     const {
@@ -31,7 +28,7 @@ const ChatInput = ({ onSend }) => {
         }
     };
 
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             handleSend();

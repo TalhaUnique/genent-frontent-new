@@ -50,7 +50,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
   headers,
   rows,
   showActions = false,
-  actionItems = null,
+  actionItems,
   displayPagination = false,
   page = 0,
   rowsPerPage = 5,
@@ -80,7 +80,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
             <StyledTableRow key={index}>
               {headers.map((header) => (
                 <StyledTableCell key={header.id}>
-                  {header.id === 'action' && showActions ? actionItems(row) : row[header.id]}
+                  {header.id === 'action' && showActions ? actionItems ? actionItems(row) : null : row[header.id]}
                 </StyledTableCell>
               ))}
             </StyledTableRow>
