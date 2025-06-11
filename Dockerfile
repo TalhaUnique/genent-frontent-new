@@ -1,18 +1,26 @@
-# Dockerfile
-FROM node:latest
+# Stage 1: Build the app
+FROM node:latest AS builder
 
-# Create app directory
 WORKDIR /app
 
-# Copy only production files
-COPY .next/ .next/
-COPY public/ public/
-COPY package.json ./
-COPY node_modules/ node_modules/
+COPY package.json package-lock.json* ./
+RUN npm install
 
-# Set environment variables
-ENV NODE_ENV=production
+COPY . .
+RUN npm run build
+
+# Stage 2: Run the app
+FROM node:latest
+
+WORKDIR /app
+
+# Only copy what's needed for production
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
 
 EXPOSE 3000
 
-CMD ["node", ".next/standalone/server.js"]
+# Start the Next.js server in standard mode
+CMD ["npm", "start"]
