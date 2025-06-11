@@ -6,7 +6,7 @@ import ChatMessage from '@/components/chat/ChatMessage';
 import ChatInput from '@/components/chat/ChatInput';
 import APIRepository from '@/utils/APIRepository';
 import { useTextToSpeech } from '@/hooks/useTextToSpeech';
-
+import { baseURL } from '@/utils/APIRepository';
 interface iMessgeList {type: string; text: string; sender: "user" | "bot"; status: "streaming" | "final"}
 interface APIMessage {instruction: string; response: string;}
 const ChatScreen = ({patient}: {patient: any}) => {
@@ -79,7 +79,7 @@ const ChatScreen = ({patient}: {patient: any}) => {
       url = url + `&chatId=${chatId}`;
     }
     const token = localStorage.getItem('authToken');
-    const response = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + url, {
+    const response = await fetch(baseURL + url, {
       method: "POST",
       headers: {
         // Add auth headers if needed

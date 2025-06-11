@@ -112,7 +112,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import apiEvents from '@/utils/apiEvents';
 
-const baseURL =
+export const baseURL =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
   'http://gennetaialb-792310392.us-east-1.elb.amazonaws.com/api/v1';
 
