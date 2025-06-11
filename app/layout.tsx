@@ -7,6 +7,7 @@ import getMuiTheme from "@/theme/muiTheme";
 import TopMenu from "@/components/layout/TopMenu";
 import SideMenu from "@/components/layout/SideMenu";
 import BottomNav from "@/components/layout/BottomNavigation";
+import ServerStatusProvider from "@/components/layout/ServerStatusProvider";
 
 type themeMode="dark" | "light" | null
 
@@ -112,9 +113,12 @@ function LayoutContent({
           background: theme.palette.background.default,
         }}
       >
+      <ServerStatusProvider/>
+
         {children}
       </Box>
       {isMobile && <BottomNav />}
     </Stack>
+    
   );
 }
