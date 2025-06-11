@@ -1,7 +1,7 @@
 "use client";
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
-const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://gennetaialb-792310392.us-east-1.elb.amazonaws.com/api/v1';
 
 const axiosInstance = axios.create({
   baseURL,
