@@ -166,7 +166,7 @@ const startPollingOriginalRequest = (originalConfig: AxiosRequestConfig) => {
       if (
         status !== 503 &&
         typeof detail !== 'string' &&
-        !(detail == "instance_starting" || detail == "failed" || detail == "instance_unavailable")
+        !(detail == "instance_starting" || detail == "instance_start_failed" || detail == "instance_unavailable")
       ) {
         isPolling = false;
         throw err;
@@ -187,7 +187,7 @@ const handleError = (error: any, originalConfig: AxiosRequestConfig) => {
   if (
     error.response?.status === 503 &&
     typeof detail === "string" &&
-    (detail == "instance_starting" || detail == "failed" || detail == "instance_unavailable")
+    (detail == "instance_starting" || detail == "instance_start_failed" || detail == "instance_unavailable")
   ) {
     console.log("START POLLING IN HANDLE ERROR")
     startPollingOriginalRequest(originalConfig);
