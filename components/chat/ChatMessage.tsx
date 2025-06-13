@@ -1,5 +1,18 @@
 "use client";
-import { Box, Typography, IconButton, Stack, Tooltip, Divider } from '@mui/material';
+import { 
+  Box, 
+  Typography, 
+  IconButton, 
+  Tooltip, 
+  Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper
+ } from '@mui/material';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 // import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 // import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
@@ -9,6 +22,8 @@ import { useState, useEffect } from 'react';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import { useTextToSpeech } from '@/hooks/useTextToSpeech';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
+import remarkGfm from 'remark-gfm';
+
 
 interface ChatMessageProps {
   message?: string;
@@ -36,6 +51,8 @@ const HtmlRenderer: React.FC<HtmlRendererProps> = ({ escapedHtml }) => {
 
   return <div dangerouslySetInnerHTML={{ __html: unescapedHtml }} />;
 };
+
+const validAligns = ['left', 'right', 'center', 'justify', 'inherit'] as const;
 
 
 const ChatMessage: React.FC<ChatMessageProps> = ({ message, sender, msgType, msgIndex, speakingMsgIndex, startSpeaking, stopSpeaking }) => {
@@ -104,23 +121,48 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, sender, msgType, msg
             {msgType == "text" && 
               <>
                 <ReactMarkdown
-                  components={{
-                    h1: ({ node, ...props }) => <Typography variant="h5" {...props} />,
-                    h2: ({ node, ...props }) => <Typography variant="h6" {...props} />,
-                    h3: ({ node, ...props }) => <Typography variant="subtitle1" {...props} />,
-                    p: ({ node, ...props }) => <Typography variant="body1" {...props} sx={{ mb: 1 }} />,
-                    li: ({ node, ...props }) => (
-                      <Typography
-                        component="li"
-                        variant="body2"
-                        {...props}
-                        sx={{ ml: 2, listStyleType: 'disc' }}
-                      />
-                    ),
-                  }}
-                >
-                  {message || ''}
-                </ReactMarkdown>
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        h1: ({ node, ...props }) => <Typography variant="h5" {...props} />,
+                        h2: ({ node, ...props }) => <Typography variant="h6" {...props} />,
+                        h3: ({ node, ...props }) => <Typography variant="subtitle1" {...props} />,
+                        p: ({ node, ...props }) => <Typography variant="body1" {...props} sx={{ mb: 1 }} />,
+                        li: ({ node, ...props }) => (
+                          <Typography
+                            component="li"
+                            variant="body2"
+                            {...props}
+                            sx={{ ml: 2, listStyleType: 'disc' }}
+                          />
+                        ),
+                        table: ({ node, ...props }) => (
+                          <TableContainer component={Paper} sx={{ my: 2 }}>
+                            <Table size="small" {...props} />
+                          </TableContainer>
+                        ),
+                        thead: ({ node, ...props }) => <TableHead {...props} />,
+                        tbody: ({ node, ...props }) => <TableBody {...props} />,
+                        tr: ({ node, ...props }) => <TableRow {...props} />,
+                        th: ({ node, ...props }) => {
+
+                          const { align, ...rest } = props;
+                          return <TableCell
+                            key={Math.random()}
+                            component="th"
+                            align={"left"}
+                            sx={{ fontWeight: 'bold', backgroundColor: 'grey.100' }}
+                            {...rest}
+                          />
+                        },
+                        td: ({ node, ...props }) => {
+                        const { align, ...rest } = props;
+                        return <TableCell align="left" {...rest} key={Math.random()}/>
+                      },
+                      }}
+                    >
+                      {message || ''}
+                    </ReactMarkdown>
+                  
                 <Divider sx={{ mt: 2, width: '100%' }} />
               </>
             }
