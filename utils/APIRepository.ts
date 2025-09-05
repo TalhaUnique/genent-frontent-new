@@ -118,7 +118,7 @@ export const baseURL =
 
 const axiosInstance = axios.create({
   baseURL,
-  timeout: 10000,
+  // timeout: 10000,
 });
 
 // Request interceptor for auth

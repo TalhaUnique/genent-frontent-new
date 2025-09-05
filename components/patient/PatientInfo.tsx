@@ -14,6 +14,9 @@ import TextSnippetOutlinedIcon from '@mui/icons-material/TextSnippetOutlined';
 import EventAvailableOutlinedIcon from '@mui/icons-material/EventAvailableOutlined';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import Medications from './Medications';
+import MedicalProblems from './MedicalProblems';
+import Appointments from './Appointments';
 
 const PatientInfoAccordion = ({ title, icon, children }: { title: string; icon?: React.ReactNode; children: React.ReactNode }) => {
   return (
@@ -112,19 +115,19 @@ export default function PatientInfo({ onClose, patient }: PatientInfoProps) {
       {activeTab === 2 && (
         <Stack sx={{ mt: 2 }}>
           <PatientInfoAccordion title="Allergies" icon={<CoronavirusOutlinedIcon />}>
-            <Allergies />
+            <Allergies allergies={patient.allergies} />
           </PatientInfoAccordion>
           <PatientInfoAccordion title="Medical Problems" icon={<HeartBrokenOutlinedIcon />}>
-            <></>
+            <MedicalProblems medical_problems={patient.medical_problems} />
           </PatientInfoAccordion>
           <PatientInfoAccordion title="Medications" icon={<VaccinesOutlinedIcon />}>
-            <></>
+            <Medications medications={patient.medications}/>
           </PatientInfoAccordion>
-          <PatientInfoAccordion title="Prescriptions" icon={<TextSnippetOutlinedIcon />}>
+          {/* <PatientInfoAccordion title="Prescriptions" icon={<TextSnippetOutlinedIcon />}>
             <></>
-          </PatientInfoAccordion>
+          </PatientInfoAccordion> */}
           <PatientInfoAccordion title="Appointments" icon={<EventAvailableOutlinedIcon />}>
-            <></>
+            <Appointments appointments={patient.appointments} />
           </PatientInfoAccordion>
         </Stack>
       )}

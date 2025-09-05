@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Table,
   TableBody,
@@ -41,8 +41,8 @@ interface CustomTableProps {
   page?: number;
   rowsPerPage?: number;
   count?: number;
-  onPageChange?: (event: unknown, newPage: number) => void;
-  onRowsPerPageChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  // onPageChange?: (event: unknown, newPage: number) => void;
+  // onRowsPerPageChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   [key: string]: any; // Relay any other props to the table
 }
 
@@ -52,13 +52,18 @@ const CustomTable: React.FC<CustomTableProps> = ({
   showActions = false,
   actionItems,
   displayPagination = false,
-  page = 0,
-  rowsPerPage = 5,
-  count = rows.length,
+  // page = 0,
+  // rowsPerPage = 5,
   onPageChange = () => {},
   onRowsPerPageChange = () => {},
   ...props
 }) => {
+
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const paginatedRows = rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
   return (
     <TableContainer>
       <Table {...props}>
@@ -76,7 +81,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, index) => (
+          {paginatedRows && paginatedRows.map((row, index) => (
             <StyledTableRow key={index}>
               {headers.map((header) => (
                 <StyledTableCell key={header.id}>
@@ -97,12 +102,12 @@ const CustomTable: React.FC<CustomTableProps> = ({
       {displayPagination && (
         <TablePagination
           component="div"
-          count={count}
           page={page}
           rowsPerPage={rowsPerPage}
-          onPageChange={onPageChange}
-          onRowsPerPageChange={onRowsPerPageChange}
+          count={rows.length}
           rowsPerPageOptions={[5, 10]}
+          onPageChange={(_, newPage) => setPage(newPage)}
+          onRowsPerPageChange={(e) => setRowsPerPage(parseInt(e.target.value, 10))}
         />
       )}
     </TableContainer>

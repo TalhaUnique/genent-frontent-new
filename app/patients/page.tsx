@@ -138,7 +138,7 @@ const PatientsPage = () => {
         <Paper sx={{ borderRadius: 2 }} variant="outlined">
           <CustomTable
             headers={headCells}
-            rows={paginatedRows}
+            rows={patients}
             showActions
             actionItems={(row: any) => (
               <ChatIcon
@@ -148,11 +148,11 @@ const PatientsPage = () => {
               />
             )}
             displayPagination
-            page={page}
-            rowsPerPage={rowsPerPage}
+            // page={page}
+            // rowsPerPage={rowsPerPage}
             count={patients.length}
-            onPageChange={(_, newPage) => setPage(newPage)}
-            onRowsPerPageChange={(e) => setRowsPerPage(parseInt(e.target.value, 10))}
+            // onPageChange={(_, newPage) => setPage(newPage)}
+            // onRowsPerPageChange={(e) => setRowsPerPage(parseInt(e.target.value, 10))}
             size="small"
           />
         </Paper>
