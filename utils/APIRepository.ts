@@ -114,7 +114,7 @@ import apiEvents from '@/utils/apiEvents';
 
 export const baseURL =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
-  'http://gennetaialb-792310392.us-east-1.elb.amazonaws.com/api/v1';
+  'https://apps.gennet.ai/api/v1';
 
 const axiosInstance = axios.create({
   baseURL,
