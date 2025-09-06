@@ -78,7 +78,7 @@ const TopMenu: React.FC<{ onMenuClick?: () => void; sideMenuOpen?: boolean, togg
             </IconButton>
           )}
           <img
-            src="/gennet.avif"
+            src="/gennet_logo.png"
             alt="Logo"
             style={{ height: 40, marginLeft: 8 }}
           />

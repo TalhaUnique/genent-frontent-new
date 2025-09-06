@@ -74,9 +74,9 @@ export default function LoginPage() {
             }}
           >
             <img
-              src="/gennet.avif"
+              src="/gennet_logo.png"
               alt="Logo"
-              style={{ width: 125, marginLeft: -35 }}
+              style={{ width: 125, marginLeft: -17 }}
             />
             <Typography variant="h5" sx={{ mb: 2 }}>
               Signin
