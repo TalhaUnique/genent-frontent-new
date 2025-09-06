@@ -88,9 +88,9 @@ function LayoutContent({
 }) {
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
 
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
     if (!isLoggedIn && pathname !== "/login") {
       router.push("/login");
     }
@@ -100,8 +100,8 @@ function LayoutContent({
     return <>{children}</>; // no layout on login
   }
 
-  return (
-    <Stack>
+  return (<>
+    {isLoggedIn ? <Stack>
       <TopMenu onMenuClick={() => setSideMenuOpen((v) => !v)} sideMenuOpen={sideMenuOpen} toggleThemeMode={toggleThemeMode}  />
       {!isMobile && <SideMenu open={sideMenuOpen} setOpen={setSideMenuOpen} />}
       <Box
@@ -118,7 +118,7 @@ function LayoutContent({
         {children}
       </Box>
       {isMobile && <BottomNav />}
-    </Stack>
-    
+    </Stack> : <></>}
+    </>
   );
 }
