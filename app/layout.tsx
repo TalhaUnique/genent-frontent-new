@@ -45,7 +45,11 @@ export default function Layout({ children }: { children: ReactNode }) {
     return <html><body></body></html>
   }
   return (
-    <html><body>
+    <html>
+      <head>
+        <link rel="icon" href="/favicon.png" type="image/png" />
+      </head>
+      <body>
         
         <ThemeProvider theme={theme}>
         <CssBaseline />
